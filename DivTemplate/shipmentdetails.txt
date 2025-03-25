@@ -1,0 +1,30 @@
+﻿
+            	 <tr onclick="navigateToShimentDetails('%%shipencryptid%%');" style="cursor: pointer;">
+            <td  onclick="event.stopPropagation(); handleShipmentAction(this, this.getAttribute('data-action'));" 
+            data-action="insert" data-shipmentid="%%spr_shipmentid%%">
+            <i class="%%icon%%" style="color:orange; cursor:pointer;"></i></td>
+                                    <td><i class="fa fa-%%spr_tran%%"></i></td>
+                                    <td>%%spr_mode%%</td>
+                                    <td>%%spr_shipmentid%%</td>
+                                    <td>%%spr_shippersreference%%</td>
+                                     <td>%%spr_consignorname%%</td>
+                                    <td>%%spr_origin%%</td>
+                                    <td data-order="%%etdfilter%%">%%spr_originetd%%</td>
+                                    <td>%%spr_consignorname%%</td>
+                                    <td>%%spr_consigneename%%</td>
+                                    <td>%%spr_destination%%</td>
+                                    <td data-order="%%etafilter%%">%%spr_destinationeta%%</td>
+                                    <td>%%spr_vessel%% </td>
+                                    <td>%%spr_houseref%% </td>
+                                    <td>%%spr_goodsdescription%%</td>
+                                    <td>%%spr_estcartagedelivery%%</td>
+                                    <td>%%spr_actualcartagedelivery%%</td>
+                                    <td>%%spr_flightvoyage%%</td>
+                                    <td>%%spr_pickupby%%</td>
+                                    <td>%%spr_actualpickup%%</td>
+                                    <td>%%icfd_container%%</td>
+                                    <td>%%spr_carriername%%</td>
+                                    <td>%%spr_teu%%</td>
+                                    <td>%%spr_weight%%</td>
+                                    <td>%%spr_volume%%</td>
+                                </tr>

@@ -1,0 +1,48 @@
+﻿       <div class="row">
+                        <div class="col-sm-4">
+                            <label class="card-title">Origin</label>
+                            <p>%%Originportname%% (%%Originportcode%%)</p>
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="card-title">Destination</label>
+                            <p>%%Destinationportname%%  (%%Destinationportcode%%)</p>
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="card-title">ETD</label>
+                            <p>%%eb_bookingetd%%</p>
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="card-title">Pickup From</label>
+                            <p>%%DeliveryPickupfrom%%</p>
+                        </div>                        <div class="col-sm-5">
+                            <label class="card-title">Delivery Destination</label>
+                            <p>%%Deliverydestination%%</p>
+                        </div>
+                                                <div class="col-sm-3">
+                            
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="card-title">Estimated Pickup</label>
+                            <p>%%Estimatepickup%%</p>
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="card-title">Estimated Delivery Date</label>
+                           <p>%%EstimatedDelivery%%</p>
+                        </div>
+                          <div class="col-sm-4">
+                            <label class="card-title">ETA</label>
+                            <p>%%eb_bookingeta%%</p>
+                        </div>
+                           <div class="col-sm-4">
+                            <label class="card-title">Actual Pickup</label>
+                            <p>NA</p>
+                        </div>
+                           <div class="col-sm-4">
+                            <label class="card-title">Actual Delivery</label>
+                            <p>NA</p>
+                        </div>
+                           <div class="col-sm-4">
+                            <label class="card-title">ATA</label>
+                            <p>NA</p>
+                        </div>
+                    </div>

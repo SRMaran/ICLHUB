@@ -1,0 +1,37 @@
+﻿
+
+ <div class="row">
+                        <div class="col-sm-4">
+                            <label class="card-title"> Port Of Origin </label>
+                            <div>%%loading%%</div>
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="card-title">Port of Destination</label>
+                            <p>%%discharge%%</p>
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="card-title">ETA</label>
+                            <p>%%icfd_eta%%</p>
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="card-title">Peach Status</label>
+                            <p>%%peachstatus%%</p>
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="card-title">Est Del</label>
+                            <p>%%Estimateddate%%</p>
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="card-title">Actual Del</label>
+                            <p>
+                                %%Actualdate%%
+                            </p>
+                        </div>
+                         <div class="col-sm-4">
+                            <label class="card-title">Empty Return</label>
+                            <p>
+                              %%icfd_emptyreturned%%
+                            </p>
+                        </div>
+                    </div>
+                           

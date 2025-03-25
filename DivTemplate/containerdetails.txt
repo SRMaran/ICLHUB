@@ -1,0 +1,15 @@
+﻿         <tr onclick="navigateToContainerdetails('%%containerencrptid%%,%%ShipmentNo%%');" style="cursor: pointer;">
+           <td  onclick="event.stopPropagation(); handleContainerAction(this, this.getAttribute('data-action'));"  
+           data-action="insert" data-container="%%icfd_container%%"> 
+           <i class="%%icon%%" style="color:orange; cursor:pointer;"></i></td>
+         <td >%%icfd_container%%</td>
+                                    <td>%%icfd_jobref%%</td>
+                                    <td>%%icfd_masterref%%</td>
+                                    <td>%%icfd_conttype%%</td>
+                                    <td>%%icfd_contmode%%</td>
+                                    <td data-order="%%etafilter%%">%%icfd_eta%%</td>
+                                    <td>%%icfd_estimateddeliver%%</td>
+                                    <td>%%icfd_actualdeliver%%</td>
+                                    <td data-order="%%etdfilter%%">%%icfd_emptyreturned%%</td>
+                                    <td>%%icfd_daysfrometatoavailability%%</td>
+                                </tr>

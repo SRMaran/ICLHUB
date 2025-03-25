@@ -1,0 +1,432 @@
+Severity:Information;Source:; Message:Sql : select * from ICL_Users where ICL_Email=@Username and ICL_Password =@Password  COLLATE SQL_Latin1_General_CP1_CS_AS; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : select top 1 Org_Name,Org_ID,Org_CCode from  organisationsession_table where UserID='36' union all select  org_name,org_id,org_ccode from  ICl_Organization  where org_ccode='0'; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : INSERT INTO ICL_UserLogs (Log_UserId, Log_UserEmail, Log_UserRole, Log_UserLogIn) VALUES (@UserId, @UserName, @UserRole, @UserLogIn); StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Affected Records : 1; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Transaction Commited; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : SELECT top 1 Log_ID FROM ICL_UserLogs WHERE Log_UserLogIn = '2025-03-22 11:45:30' and Log_UserId='36'; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : EXEC GetwidgetAdmin  @Todaydate = '03-22-2025'; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : EXEC GetShipmentCounts ; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : select distinct spr_origin from shipmentProfilereport  where spr_modifiedon is null; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : select DISTINCT a.containernumber,b.icfd_jobref,c.spr_origin,c.spr_destination,FORMAT(c.spr_originetd, 'dd-MMM-yyyy') AS  spr_originetd from ICLRoute_livelocation a inner join swl_icfdreport b on a.containernumber=b.icfd_container inner join shipmentProfilereport c on b.icfd_jobref=c.spr_shipmentid where  a.route_livelatitude is not null and a.route_livelongitude is not null and c.spr_modifiedon is null ; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : select count(*)as quotescount from Quotes_Details where CAST(CreatedOn AS DATE)  = '03-22-2025' and ModifiedOn is null; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : SELECT ICL_Image, CONCAT(ICL_FirstName, ' ', ICL_LastName) AS FullName, ICL_FirstName, ICL_LastName, ICL_UserName FROM ICL_Users WHERE ICL_Email=@ICL_Email; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : select * from ICL_Menu inner join ICL_SubMaster a on Menukey=a.SM_MenuId inner join ICL_GroupMaster b on b.GM_Pk=a.SM_GroupId inner join ICL_Users c on b.GM_Role = c.ICL_role where parentmenuid='0' and c.ICL_role='2' and ICL_Email='jijesh.p@iclgo.com' order by menulist asc; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : select * from ICL_Menu inner join ICL_SubMaster a on Menukey=a.SM_MenuId inner join ICL_GroupMaster b on b.GM_Pk = a.SM_GroupId inner join ICL_Users c on b.GM_Role = c.ICL_role where c.ICL_role='2' and ICL_Email='jijesh.p@iclgo.com' order by menulist asc; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : with overall as( SELECT org_name, org_id, org_ccode FROM ICl_Organization  WHERE org_ccode = '0' GROUP BY org_name,org_id, org_ccode union all SELECT STRING_AGG(UPPER(LEFT(value, 1)) + LOWER(SUBSTRING(value, 2, LEN(value))), ' ') AS org_name, org_id, org_ccode FROM ICl_Organization CROSS APPLY STRING_SPLIT(org_name, ' ')  WHERE org_userid='36' and org_ccode != '0' GROUP BY org_id, org_ccode ) select org_name, org_id, org_ccode from overall ORDER BY org_ccode ASC; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : with overall as( SELECT org_name, org_id, org_ccode FROM ICl_Organization  WHERE org_ccode = '0' GROUP BY org_name,org_id, org_ccode union all SELECT STRING_AGG(UPPER(LEFT(value, 1)) + LOWER(SUBSTRING(value, 2, LEN(value))), ' ') AS org_name, org_id, org_ccode FROM ICl_Organization CROSS APPLY STRING_SPLIT(org_name, ' ')  WHERE org_userid='36' and org_ccode != '0' GROUP BY org_id, org_ccode ) select org_name, org_id, org_ccode from overall ORDER BY org_ccode ASC; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : 
+ IF EXISTS (SELECT 1 FROM organisationsession_table WHERE UserID = @UserID)
+ BEGIN
+     UPDATE organisationsession_table 
+     SET Org_ID = @Org_ID, Org_Name = @Org_Name,Username=@Username,UserRole=@UserRole,Org_CCode=@Org_CCode,ModifiedOn = GETDATE()
+     WHERE UserID = @UserID
+ END
+ ELSE
+ BEGIN
+     INSERT INTO organisationsession_table (UserID, Org_ID, Org_Name,UserRole,Username,Org_CCode,CreatedOn)
+     VALUES (@UserID, @Org_ID, @Org_Name,@UserRole,@Username,@Org_CCode, GETDATE())
+ END; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Affected Records : 1; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Transaction Commited; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : EXEC GetcalendarAdmin; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : SELECT DISTINCT icfd_jobref, icfd_eta AS Arriving, 
+               CASE 
+                   WHEN icfd_estimateddeliver IS NOT NULL AND icfd_estimateddeliver <> '1900-01-01 00:00:00.000' 
+                   THEN icfd_estimateddeliver 
+                   WHEN icfd_actualdeliver IS NOT NULL AND icfd_actualdeliver <> '1900-01-01 00:00:00.000' 
+                   THEN icfd_actualdeliver 
+                   ELSE NULL 
+               END AS shipped 
+               FROM swl_icfdreport 
+               WHERE TRY_CONVERT(DATETIME,icfd_eta)  <= GETDATE() order by icfd_eta asc; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : select SUM(CASE WHEN YEAR(a.spr_originetd)= 2025 and MONTH(a.spr_originetd) = 3 THEN 1 ELSE 0 END) AS 'Mar 2025',SUM(CASE WHEN YEAR(a.spr_originetd)= 2025 and MONTH(a.spr_originetd) = 2 THEN 1 ELSE 0 END) AS 'Feb 2025',SUM(CASE WHEN YEAR(a.spr_originetd)= 2025 and MONTH(a.spr_originetd) = 1 THEN 1 ELSE 0 END) AS 'Jan 2025',SUM(CASE WHEN YEAR(a.spr_originetd)= 2024 and MONTH(a.spr_originetd) = 12 THEN 1 ELSE 0 END) AS 'Dec 2024',SUM(CASE WHEN YEAR(a.spr_originetd)= 2024 and MONTH(a.spr_originetd) = 11 THEN 1 ELSE 0 END) AS 'Nov 2024',SUM(CASE WHEN YEAR(a.spr_originetd)= 2024 and MONTH(a.spr_originetd) = 10 THEN 1 ELSE 0 END) AS 'Oct 2024',SUM(CASE WHEN YEAR(a.spr_originetd)= 2024 and MONTH(a.spr_originetd) = 9 THEN 1 ELSE 0 END) AS 'Sep 2024',SUM(CASE WHEN YEAR(a.spr_originetd)= 2024 and MONTH(a.spr_originetd) = 8 THEN 1 ELSE 0 END) AS 'Aug 2024',SUM(CASE WHEN YEAR(a.spr_originetd)= 2024 and MONTH(a.spr_originetd) = 7 THEN 1 ELSE 0 END) AS 'Jul 2024',SUM(CASE WHEN YEAR(a.spr_originetd)= 2024 and MONTH(a.spr_originetd) = 6 THEN 1 ELSE 0 END) AS 'Jun 2024',SUM(CASE WHEN YEAR(a.spr_originetd)= 2024 and MONTH(a.spr_originetd) = 5 THEN 1 ELSE 0 END) AS 'May 2024',SUM(CASE WHEN YEAR(a.spr_originetd)= 2024 and MONTH(a.spr_originetd) = 4 THEN 1 ELSE 0 END) AS 'Apr 2024' from  shipmentProfilereport a ; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : SELECT ICL_Image, CONCAT(ICL_FirstName, ' ', ICL_LastName) AS FullName, ICL_FirstName, ICL_LastName, ICL_UserName FROM ICL_Users WHERE ICL_Email=@ICL_Email; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : select * from ICL_Menu inner join ICL_SubMaster a on Menukey=a.SM_MenuId inner join ICL_GroupMaster b on b.GM_Pk=a.SM_GroupId inner join ICL_Users c on b.GM_Role = c.ICL_role where parentmenuid='0' and c.ICL_role='2' and ICL_Email='jijesh.p@iclgo.com' order by menulist asc; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : select * from ICL_Menu inner join ICL_SubMaster a on Menukey=a.SM_MenuId inner join ICL_GroupMaster b on b.GM_Pk = a.SM_GroupId inner join ICL_Users c on b.GM_Role = c.ICL_role where c.ICL_role='2' and ICL_Email='jijesh.p@iclgo.com' order by menulist asc; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : with overall as( SELECT org_name, org_id, org_ccode FROM ICl_Organization  WHERE org_ccode = '0' GROUP BY org_name,org_id, org_ccode union all SELECT STRING_AGG(UPPER(LEFT(value, 1)) + LOWER(SUBSTRING(value, 2, LEN(value))), ' ') AS org_name, org_id, org_ccode FROM ICl_Organization CROSS APPLY STRING_SPLIT(org_name, ' ')  WHERE org_userid='36' and org_ccode != '0' GROUP BY org_id, org_ccode ) select org_name, org_id, org_ccode from overall ORDER BY org_ccode ASC; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : with overall as( SELECT org_name, org_id, org_ccode FROM ICl_Organization  WHERE org_ccode = '0' GROUP BY org_name,org_id, org_ccode union all SELECT STRING_AGG(UPPER(LEFT(value, 1)) + LOWER(SUBSTRING(value, 2, LEN(value))), ' ') AS org_name, org_id, org_ccode FROM ICl_Organization CROSS APPLY STRING_SPLIT(org_name, ' ')  WHERE org_userid='36' and org_ccode != '0' GROUP BY org_id, org_ccode ) select org_name, org_id, org_ccode from overall ORDER BY org_ccode ASC; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : 
+ IF EXISTS (SELECT 1 FROM organisationsession_table WHERE UserID = @UserID)
+ BEGIN
+     UPDATE organisationsession_table 
+     SET Org_ID = @Org_ID, Org_Name = @Org_Name,Username=@Username,UserRole=@UserRole,Org_CCode=@Org_CCode,ModifiedOn = GETDATE()
+     WHERE UserID = @UserID
+ END
+ ELSE
+ BEGIN
+     INSERT INTO organisationsession_table (UserID, Org_ID, Org_Name,UserRole,Username,Org_CCode,CreatedOn)
+     VALUES (@UserID, @Org_ID, @Org_Name,@UserRole,@Username,@Org_CCode, GETDATE())
+ END; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Affected Records : 1; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Transaction Commited; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : INSERT INTO Quotes_Details (FirstName, Surename, CompanyName, EmailAddress, ContactNumber, TransportMode, ReadyToCollectDate, TargetDeliveryDate, Volume, Weight, Width, Length, Height, Dimensions, PackageType, Quantity, CustomsClearance, Incoterms, HazardousGoods, OutOfGauge, AdditionalComments, UploadFile, CreatedOn, CreatedBy, ModifiedOn, ModifiedBy) VALUES (@FirstName, @Surename, @CompanyName, @EmailAddress, @ContactNumber, @TransportMode, @ReadyToCollectDate, @TargetDeliveryDate, @Volume, @Weight, @Width, @Length, @Height, @Dimensions, @PackageType, @Quantity, @CustomsClearance, @Incoterms, @HazardousGoods, @OutOfGauge, @AdditionalComments, @UploadFile, @CreatedOn, @CreatedBy, @ModifiedOn, @ModifiedBy); StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Affected Records : 1; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Transaction Commited; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : select * from ICL_Users where ICL_Email=@Username and ICL_Password =@Password  COLLATE SQL_Latin1_General_CP1_CS_AS; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : select top 1 Org_Name,Org_ID,Org_CCode from  organisationsession_table where UserID='36' union all select  org_name,org_id,org_ccode from  ICl_Organization  where org_ccode='0'; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : INSERT INTO ICL_UserLogs (Log_UserId, Log_UserEmail, Log_UserRole, Log_UserLogIn) VALUES (@UserId, @UserName, @UserRole, @UserLogIn); StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Affected Records : 1; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Transaction Commited; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : SELECT top 1 Log_ID FROM ICL_UserLogs WHERE Log_UserLogIn = '2025-03-22 12:50:23' and Log_UserId='36'; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : EXEC GetwidgetAdmin  @Todaydate = '03-22-2025'; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : EXEC GetShipmentCounts ; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : select distinct spr_origin from shipmentProfilereport  where spr_modifiedon is null; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : select DISTINCT a.containernumber,b.icfd_jobref,c.spr_origin,c.spr_destination,FORMAT(c.spr_originetd, 'dd-MMM-yyyy') AS  spr_originetd from ICLRoute_livelocation a inner join swl_icfdreport b on a.containernumber=b.icfd_container inner join shipmentProfilereport c on b.icfd_jobref=c.spr_shipmentid where  a.route_livelatitude is not null and a.route_livelongitude is not null and c.spr_modifiedon is null ; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : select count(*)as quotescount from Quotes_Details where CAST(CreatedOn AS DATE)  = '03-22-2025' and ModifiedOn is null; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : SELECT ICL_Image, CONCAT(ICL_FirstName, ' ', ICL_LastName) AS FullName, ICL_FirstName, ICL_LastName, ICL_UserName FROM ICL_Users WHERE ICL_Email=@ICL_Email; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : select * from ICL_Menu inner join ICL_SubMaster a on Menukey=a.SM_MenuId inner join ICL_GroupMaster b on b.GM_Pk=a.SM_GroupId inner join ICL_Users c on b.GM_Role = c.ICL_role where parentmenuid='0' and c.ICL_role='2' and ICL_Email='jijesh.p@iclgo.com' order by menulist asc; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : select * from ICL_Menu inner join ICL_SubMaster a on Menukey=a.SM_MenuId inner join ICL_GroupMaster b on b.GM_Pk = a.SM_GroupId inner join ICL_Users c on b.GM_Role = c.ICL_role where c.ICL_role='2' and ICL_Email='jijesh.p@iclgo.com' order by menulist asc; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : with overall as( SELECT org_name, org_id, org_ccode FROM ICl_Organization  WHERE org_ccode = '0' GROUP BY org_name,org_id, org_ccode union all SELECT STRING_AGG(UPPER(LEFT(value, 1)) + LOWER(SUBSTRING(value, 2, LEN(value))), ' ') AS org_name, org_id, org_ccode FROM ICl_Organization CROSS APPLY STRING_SPLIT(org_name, ' ')  WHERE org_userid='36' and org_ccode != '0' GROUP BY org_id, org_ccode ) select org_name, org_id, org_ccode from overall ORDER BY org_ccode ASC; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : with overall as( SELECT org_name, org_id, org_ccode FROM ICl_Organization  WHERE org_ccode = '0' GROUP BY org_name,org_id, org_ccode union all SELECT STRING_AGG(UPPER(LEFT(value, 1)) + LOWER(SUBSTRING(value, 2, LEN(value))), ' ') AS org_name, org_id, org_ccode FROM ICl_Organization CROSS APPLY STRING_SPLIT(org_name, ' ')  WHERE org_userid='36' and org_ccode != '0' GROUP BY org_id, org_ccode ) select org_name, org_id, org_ccode from overall ORDER BY org_ccode ASC; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : 
+ IF EXISTS (SELECT 1 FROM organisationsession_table WHERE UserID = @UserID)
+ BEGIN
+     UPDATE organisationsession_table 
+     SET Org_ID = @Org_ID, Org_Name = @Org_Name,Username=@Username,UserRole=@UserRole,Org_CCode=@Org_CCode,ModifiedOn = GETDATE()
+     WHERE UserID = @UserID
+ END
+ ELSE
+ BEGIN
+     INSERT INTO organisationsession_table (UserID, Org_ID, Org_Name,UserRole,Username,Org_CCode,CreatedOn)
+     VALUES (@UserID, @Org_ID, @Org_Name,@UserRole,@Username,@Org_CCode, GETDATE())
+ END; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Affected Records : 1; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Transaction Commited; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : EXEC GetcalendarAdmin; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : SELECT DISTINCT icfd_jobref, icfd_eta AS Arriving, 
+               CASE 
+                   WHEN icfd_estimateddeliver IS NOT NULL AND icfd_estimateddeliver <> '1900-01-01 00:00:00.000' 
+                   THEN icfd_estimateddeliver 
+                   WHEN icfd_actualdeliver IS NOT NULL AND icfd_actualdeliver <> '1900-01-01 00:00:00.000' 
+                   THEN icfd_actualdeliver 
+                   ELSE NULL 
+               END AS shipped 
+               FROM swl_icfdreport 
+               WHERE TRY_CONVERT(DATETIME,icfd_eta)  <= GETDATE() order by icfd_eta asc; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : select SUM(CASE WHEN YEAR(a.spr_originetd)= 2025 and MONTH(a.spr_originetd) = 3 THEN 1 ELSE 0 END) AS 'Mar 2025',SUM(CASE WHEN YEAR(a.spr_originetd)= 2025 and MONTH(a.spr_originetd) = 2 THEN 1 ELSE 0 END) AS 'Feb 2025',SUM(CASE WHEN YEAR(a.spr_originetd)= 2025 and MONTH(a.spr_originetd) = 1 THEN 1 ELSE 0 END) AS 'Jan 2025',SUM(CASE WHEN YEAR(a.spr_originetd)= 2024 and MONTH(a.spr_originetd) = 12 THEN 1 ELSE 0 END) AS 'Dec 2024',SUM(CASE WHEN YEAR(a.spr_originetd)= 2024 and MONTH(a.spr_originetd) = 11 THEN 1 ELSE 0 END) AS 'Nov 2024',SUM(CASE WHEN YEAR(a.spr_originetd)= 2024 and MONTH(a.spr_originetd) = 10 THEN 1 ELSE 0 END) AS 'Oct 2024',SUM(CASE WHEN YEAR(a.spr_originetd)= 2024 and MONTH(a.spr_originetd) = 9 THEN 1 ELSE 0 END) AS 'Sep 2024',SUM(CASE WHEN YEAR(a.spr_originetd)= 2024 and MONTH(a.spr_originetd) = 8 THEN 1 ELSE 0 END) AS 'Aug 2024',SUM(CASE WHEN YEAR(a.spr_originetd)= 2024 and MONTH(a.spr_originetd) = 7 THEN 1 ELSE 0 END) AS 'Jul 2024',SUM(CASE WHEN YEAR(a.spr_originetd)= 2024 and MONTH(a.spr_originetd) = 6 THEN 1 ELSE 0 END) AS 'Jun 2024',SUM(CASE WHEN YEAR(a.spr_originetd)= 2024 and MONTH(a.spr_originetd) = 5 THEN 1 ELSE 0 END) AS 'May 2024',SUM(CASE WHEN YEAR(a.spr_originetd)= 2024 and MONTH(a.spr_originetd) = 4 THEN 1 ELSE 0 END) AS 'Apr 2024' from  shipmentProfilereport a ; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : select * from ICL_Users where ICL_Email=@Username and ICL_Password =@Password  COLLATE SQL_Latin1_General_CP1_CS_AS; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : select top 1 Org_Name,Org_ID,Org_CCode from  organisationsession_table where UserID='36' union all select  org_name,org_id,org_ccode from  ICl_Organization  where org_ccode='0'; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : INSERT INTO ICL_UserLogs (Log_UserId, Log_UserEmail, Log_UserRole, Log_UserLogIn) VALUES (@UserId, @UserName, @UserRole, @UserLogIn); StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Affected Records : 1; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Transaction Commited; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : SELECT top 1 Log_ID FROM ICL_UserLogs WHERE Log_UserLogIn = '2025-03-22 12:51:17' and Log_UserId='36'; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : EXEC GetwidgetAdmin  @Todaydate = '03-22-2025'; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : EXEC GetShipmentCounts ; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : select distinct spr_origin from shipmentProfilereport  where spr_modifiedon is null; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : select DISTINCT a.containernumber,b.icfd_jobref,c.spr_origin,c.spr_destination,FORMAT(c.spr_originetd, 'dd-MMM-yyyy') AS  spr_originetd from ICLRoute_livelocation a inner join swl_icfdreport b on a.containernumber=b.icfd_container inner join shipmentProfilereport c on b.icfd_jobref=c.spr_shipmentid where  a.route_livelatitude is not null and a.route_livelongitude is not null and c.spr_modifiedon is null ; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : select count(*)as quotescount from Quotes_Details where CAST(CreatedOn AS DATE)  = '03-22-2025' and ModifiedOn is null; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : SELECT ICL_Image, CONCAT(ICL_FirstName, ' ', ICL_LastName) AS FullName, ICL_FirstName, ICL_LastName, ICL_UserName FROM ICL_Users WHERE ICL_Email=@ICL_Email; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : select * from ICL_Menu inner join ICL_SubMaster a on Menukey=a.SM_MenuId inner join ICL_GroupMaster b on b.GM_Pk=a.SM_GroupId inner join ICL_Users c on b.GM_Role = c.ICL_role where parentmenuid='0' and c.ICL_role='2' and ICL_Email='jijesh.p@iclgo.com' order by menulist asc; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : select * from ICL_Menu inner join ICL_SubMaster a on Menukey=a.SM_MenuId inner join ICL_GroupMaster b on b.GM_Pk = a.SM_GroupId inner join ICL_Users c on b.GM_Role = c.ICL_role where c.ICL_role='2' and ICL_Email='jijesh.p@iclgo.com' order by menulist asc; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : with overall as( SELECT org_name, org_id, org_ccode FROM ICl_Organization  WHERE org_ccode = '0' GROUP BY org_name,org_id, org_ccode union all SELECT STRING_AGG(UPPER(LEFT(value, 1)) + LOWER(SUBSTRING(value, 2, LEN(value))), ' ') AS org_name, org_id, org_ccode FROM ICl_Organization CROSS APPLY STRING_SPLIT(org_name, ' ')  WHERE org_userid='36' and org_ccode != '0' GROUP BY org_id, org_ccode ) select org_name, org_id, org_ccode from overall ORDER BY org_ccode ASC; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : with overall as( SELECT org_name, org_id, org_ccode FROM ICl_Organization  WHERE org_ccode = '0' GROUP BY org_name,org_id, org_ccode union all SELECT STRING_AGG(UPPER(LEFT(value, 1)) + LOWER(SUBSTRING(value, 2, LEN(value))), ' ') AS org_name, org_id, org_ccode FROM ICl_Organization CROSS APPLY STRING_SPLIT(org_name, ' ')  WHERE org_userid='36' and org_ccode != '0' GROUP BY org_id, org_ccode ) select org_name, org_id, org_ccode from overall ORDER BY org_ccode ASC; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : 
+ IF EXISTS (SELECT 1 FROM organisationsession_table WHERE UserID = @UserID)
+ BEGIN
+     UPDATE organisationsession_table 
+     SET Org_ID = @Org_ID, Org_Name = @Org_Name,Username=@Username,UserRole=@UserRole,Org_CCode=@Org_CCode,ModifiedOn = GETDATE()
+     WHERE UserID = @UserID
+ END
+ ELSE
+ BEGIN
+     INSERT INTO organisationsession_table (UserID, Org_ID, Org_Name,UserRole,Username,Org_CCode,CreatedOn)
+     VALUES (@UserID, @Org_ID, @Org_Name,@UserRole,@Username,@Org_CCode, GETDATE())
+ END; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Affected Records : 1; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Transaction Commited; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : EXEC GetcalendarAdmin; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : SELECT DISTINCT icfd_jobref, icfd_eta AS Arriving, 
+               CASE 
+                   WHEN icfd_estimateddeliver IS NOT NULL AND icfd_estimateddeliver <> '1900-01-01 00:00:00.000' 
+                   THEN icfd_estimateddeliver 
+                   WHEN icfd_actualdeliver IS NOT NULL AND icfd_actualdeliver <> '1900-01-01 00:00:00.000' 
+                   THEN icfd_actualdeliver 
+                   ELSE NULL 
+               END AS shipped 
+               FROM swl_icfdreport 
+               WHERE TRY_CONVERT(DATETIME,icfd_eta)  <= GETDATE() order by icfd_eta asc; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : select SUM(CASE WHEN YEAR(a.spr_originetd)= 2025 and MONTH(a.spr_originetd) = 3 THEN 1 ELSE 0 END) AS 'Mar 2025',SUM(CASE WHEN YEAR(a.spr_originetd)= 2025 and MONTH(a.spr_originetd) = 2 THEN 1 ELSE 0 END) AS 'Feb 2025',SUM(CASE WHEN YEAR(a.spr_originetd)= 2025 and MONTH(a.spr_originetd) = 1 THEN 1 ELSE 0 END) AS 'Jan 2025',SUM(CASE WHEN YEAR(a.spr_originetd)= 2024 and MONTH(a.spr_originetd) = 12 THEN 1 ELSE 0 END) AS 'Dec 2024',SUM(CASE WHEN YEAR(a.spr_originetd)= 2024 and MONTH(a.spr_originetd) = 11 THEN 1 ELSE 0 END) AS 'Nov 2024',SUM(CASE WHEN YEAR(a.spr_originetd)= 2024 and MONTH(a.spr_originetd) = 10 THEN 1 ELSE 0 END) AS 'Oct 2024',SUM(CASE WHEN YEAR(a.spr_originetd)= 2024 and MONTH(a.spr_originetd) = 9 THEN 1 ELSE 0 END) AS 'Sep 2024',SUM(CASE WHEN YEAR(a.spr_originetd)= 2024 and MONTH(a.spr_originetd) = 8 THEN 1 ELSE 0 END) AS 'Aug 2024',SUM(CASE WHEN YEAR(a.spr_originetd)= 2024 and MONTH(a.spr_originetd) = 7 THEN 1 ELSE 0 END) AS 'Jul 2024',SUM(CASE WHEN YEAR(a.spr_originetd)= 2024 and MONTH(a.spr_originetd) = 6 THEN 1 ELSE 0 END) AS 'Jun 2024',SUM(CASE WHEN YEAR(a.spr_originetd)= 2024 and MONTH(a.spr_originetd) = 5 THEN 1 ELSE 0 END) AS 'May 2024',SUM(CASE WHEN YEAR(a.spr_originetd)= 2024 and MONTH(a.spr_originetd) = 4 THEN 1 ELSE 0 END) AS 'Apr 2024' from  shipmentProfilereport a ; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : SELECT ICL_Image, CONCAT(ICL_FirstName, ' ', ICL_LastName) AS FullName, ICL_FirstName, ICL_LastName, ICL_UserName FROM ICL_Users WHERE ICL_Email=@ICL_Email; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : select * from ICL_Menu inner join ICL_SubMaster a on Menukey=a.SM_MenuId inner join ICL_GroupMaster b on b.GM_Pk=a.SM_GroupId inner join ICL_Users c on b.GM_Role = c.ICL_role where parentmenuid='0' and c.ICL_role='2' and ICL_Email='jijesh.p@iclgo.com' order by menulist asc; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : select * from ICL_Menu inner join ICL_SubMaster a on Menukey=a.SM_MenuId inner join ICL_GroupMaster b on b.GM_Pk = a.SM_GroupId inner join ICL_Users c on b.GM_Role = c.ICL_role where c.ICL_role='2' and ICL_Email='jijesh.p@iclgo.com' order by menulist asc; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : with overall as( SELECT org_name, org_id, org_ccode FROM ICl_Organization  WHERE org_ccode = '0' GROUP BY org_name,org_id, org_ccode union all SELECT STRING_AGG(UPPER(LEFT(value, 1)) + LOWER(SUBSTRING(value, 2, LEN(value))), ' ') AS org_name, org_id, org_ccode FROM ICl_Organization CROSS APPLY STRING_SPLIT(org_name, ' ')  WHERE org_userid='36' and org_ccode != '0' GROUP BY org_id, org_ccode ) select org_name, org_id, org_ccode from overall ORDER BY org_ccode ASC; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : with overall as( SELECT org_name, org_id, org_ccode FROM ICl_Organization  WHERE org_ccode = '0' GROUP BY org_name,org_id, org_ccode union all SELECT STRING_AGG(UPPER(LEFT(value, 1)) + LOWER(SUBSTRING(value, 2, LEN(value))), ' ') AS org_name, org_id, org_ccode FROM ICl_Organization CROSS APPLY STRING_SPLIT(org_name, ' ')  WHERE org_userid='36' and org_ccode != '0' GROUP BY org_id, org_ccode ) select org_name, org_id, org_ccode from overall ORDER BY org_ccode ASC; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : 
+ IF EXISTS (SELECT 1 FROM organisationsession_table WHERE UserID = @UserID)
+ BEGIN
+     UPDATE organisationsession_table 
+     SET Org_ID = @Org_ID, Org_Name = @Org_Name,Username=@Username,UserRole=@UserRole,Org_CCode=@Org_CCode,ModifiedOn = GETDATE()
+     WHERE UserID = @UserID
+ END
+ ELSE
+ BEGIN
+     INSERT INTO organisationsession_table (UserID, Org_ID, Org_Name,UserRole,Username,Org_CCode,CreatedOn)
+     VALUES (@UserID, @Org_ID, @Org_Name,@UserRole,@Username,@Org_CCode, GETDATE())
+ END; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Affected Records : 1; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Transaction Commited; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : SELECT ICL_Image, CONCAT(ICL_FirstName, ' ', ICL_LastName) AS FullName, ICL_FirstName, ICL_LastName, ICL_UserName FROM ICL_Users WHERE ICL_Email=@ICL_Email; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : select * from ICL_Menu inner join ICL_SubMaster a on Menukey=a.SM_MenuId inner join ICL_GroupMaster b on b.GM_Pk=a.SM_GroupId inner join ICL_Users c on b.GM_Role = c.ICL_role where parentmenuid='0' and c.ICL_role='2' and ICL_Email='jijesh.p@iclgo.com' order by menulist asc; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : select * from ICL_Menu inner join ICL_SubMaster a on Menukey=a.SM_MenuId inner join ICL_GroupMaster b on b.GM_Pk = a.SM_GroupId inner join ICL_Users c on b.GM_Role = c.ICL_role where c.ICL_role='2' and ICL_Email='jijesh.p@iclgo.com' order by menulist asc; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : with overall as( SELECT org_name, org_id, org_ccode FROM ICl_Organization  WHERE org_ccode = '0' GROUP BY org_name,org_id, org_ccode union all SELECT STRING_AGG(UPPER(LEFT(value, 1)) + LOWER(SUBSTRING(value, 2, LEN(value))), ' ') AS org_name, org_id, org_ccode FROM ICl_Organization CROSS APPLY STRING_SPLIT(org_name, ' ')  WHERE org_userid='36' and org_ccode != '0' GROUP BY org_id, org_ccode ) select org_name, org_id, org_ccode from overall ORDER BY org_ccode ASC; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : with overall as( SELECT org_name, org_id, org_ccode FROM ICl_Organization  WHERE org_ccode = '0' GROUP BY org_name,org_id, org_ccode union all SELECT STRING_AGG(UPPER(LEFT(value, 1)) + LOWER(SUBSTRING(value, 2, LEN(value))), ' ') AS org_name, org_id, org_ccode FROM ICl_Organization CROSS APPLY STRING_SPLIT(org_name, ' ')  WHERE org_userid='36' and org_ccode != '0' GROUP BY org_id, org_ccode ) select org_name, org_id, org_ccode from overall ORDER BY org_ccode ASC; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : 
+ IF EXISTS (SELECT 1 FROM organisationsession_table WHERE UserID = @UserID)
+ BEGIN
+     UPDATE organisationsession_table 
+     SET Org_ID = @Org_ID, Org_Name = @Org_Name,Username=@Username,UserRole=@UserRole,Org_CCode=@Org_CCode,ModifiedOn = GETDATE()
+     WHERE UserID = @UserID
+ END
+ ELSE
+ BEGIN
+     INSERT INTO organisationsession_table (UserID, Org_ID, Org_Name,UserRole,Username,Org_CCode,CreatedOn)
+     VALUES (@UserID, @Org_ID, @Org_Name,@UserRole,@Username,@Org_CCode, GETDATE())
+ END; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Affected Records : 1; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Transaction Commited; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : SELECT ICL_Image, CONCAT(ICL_FirstName, ' ', ICL_LastName) AS FullName, ICL_FirstName, ICL_LastName, ICL_UserName FROM ICL_Users WHERE ICL_Email=@ICL_Email; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : select * from ICL_Menu inner join ICL_SubMaster a on Menukey=a.SM_MenuId inner join ICL_GroupMaster b on b.GM_Pk=a.SM_GroupId inner join ICL_Users c on b.GM_Role = c.ICL_role where parentmenuid='0' and c.ICL_role='2' and ICL_Email='jijesh.p@iclgo.com' order by menulist asc; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : select * from ICL_Menu inner join ICL_SubMaster a on Menukey=a.SM_MenuId inner join ICL_GroupMaster b on b.GM_Pk = a.SM_GroupId inner join ICL_Users c on b.GM_Role = c.ICL_role where c.ICL_role='2' and ICL_Email='jijesh.p@iclgo.com' order by menulist asc; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : with overall as( SELECT org_name, org_id, org_ccode FROM ICl_Organization  WHERE org_ccode = '0' GROUP BY org_name,org_id, org_ccode union all SELECT STRING_AGG(UPPER(LEFT(value, 1)) + LOWER(SUBSTRING(value, 2, LEN(value))), ' ') AS org_name, org_id, org_ccode FROM ICl_Organization CROSS APPLY STRING_SPLIT(org_name, ' ')  WHERE org_userid='36' and org_ccode != '0' GROUP BY org_id, org_ccode ) select org_name, org_id, org_ccode from overall ORDER BY org_ccode ASC; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : with overall as( SELECT org_name, org_id, org_ccode FROM ICl_Organization  WHERE org_ccode = '0' GROUP BY org_name,org_id, org_ccode union all SELECT STRING_AGG(UPPER(LEFT(value, 1)) + LOWER(SUBSTRING(value, 2, LEN(value))), ' ') AS org_name, org_id, org_ccode FROM ICl_Organization CROSS APPLY STRING_SPLIT(org_name, ' ')  WHERE org_userid='36' and org_ccode != '0' GROUP BY org_id, org_ccode ) select org_name, org_id, org_ccode from overall ORDER BY org_ccode ASC; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : 
+ IF EXISTS (SELECT 1 FROM organisationsession_table WHERE UserID = @UserID)
+ BEGIN
+     UPDATE organisationsession_table 
+     SET Org_ID = @Org_ID, Org_Name = @Org_Name,Username=@Username,UserRole=@UserRole,Org_CCode=@Org_CCode,ModifiedOn = GETDATE()
+     WHERE UserID = @UserID
+ END
+ ELSE
+ BEGIN
+     INSERT INTO organisationsession_table (UserID, Org_ID, Org_Name,UserRole,Username,Org_CCode,CreatedOn)
+     VALUES (@UserID, @Org_ID, @Org_Name,@UserRole,@Username,@Org_CCode, GETDATE())
+ END; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Affected Records : 1; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Transaction Commited; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : SELECT ICL_Image, CONCAT(ICL_FirstName, ' ', ICL_LastName) AS FullName, ICL_FirstName, ICL_LastName, ICL_UserName FROM ICL_Users WHERE ICL_Email=@ICL_Email; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : select * from ICL_Menu inner join ICL_SubMaster a on Menukey=a.SM_MenuId inner join ICL_GroupMaster b on b.GM_Pk=a.SM_GroupId inner join ICL_Users c on b.GM_Role = c.ICL_role where parentmenuid='0' and c.ICL_role='2' and ICL_Email='jijesh.p@iclgo.com' order by menulist asc; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : select * from ICL_Menu inner join ICL_SubMaster a on Menukey=a.SM_MenuId inner join ICL_GroupMaster b on b.GM_Pk = a.SM_GroupId inner join ICL_Users c on b.GM_Role = c.ICL_role where c.ICL_role='2' and ICL_Email='jijesh.p@iclgo.com' order by menulist asc; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : with overall as( SELECT org_name, org_id, org_ccode FROM ICl_Organization  WHERE org_ccode = '0' GROUP BY org_name,org_id, org_ccode union all SELECT STRING_AGG(UPPER(LEFT(value, 1)) + LOWER(SUBSTRING(value, 2, LEN(value))), ' ') AS org_name, org_id, org_ccode FROM ICl_Organization CROSS APPLY STRING_SPLIT(org_name, ' ')  WHERE org_userid='36' and org_ccode != '0' GROUP BY org_id, org_ccode ) select org_name, org_id, org_ccode from overall ORDER BY org_ccode ASC; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : with overall as( SELECT org_name, org_id, org_ccode FROM ICl_Organization  WHERE org_ccode = '0' GROUP BY org_name,org_id, org_ccode union all SELECT STRING_AGG(UPPER(LEFT(value, 1)) + LOWER(SUBSTRING(value, 2, LEN(value))), ' ') AS org_name, org_id, org_ccode FROM ICl_Organization CROSS APPLY STRING_SPLIT(org_name, ' ')  WHERE org_userid='36' and org_ccode != '0' GROUP BY org_id, org_ccode ) select org_name, org_id, org_ccode from overall ORDER BY org_ccode ASC; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : 
+ IF EXISTS (SELECT 1 FROM organisationsession_table WHERE UserID = @UserID)
+ BEGIN
+     UPDATE organisationsession_table 
+     SET Org_ID = @Org_ID, Org_Name = @Org_Name,Username=@Username,UserRole=@UserRole,Org_CCode=@Org_CCode,ModifiedOn = GETDATE()
+     WHERE UserID = @UserID
+ END
+ ELSE
+ BEGIN
+     INSERT INTO organisationsession_table (UserID, Org_ID, Org_Name,UserRole,Username,Org_CCode,CreatedOn)
+     VALUES (@UserID, @Org_ID, @Org_Name,@UserRole,@Username,@Org_CCode, GETDATE())
+ END; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Affected Records : 1; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Transaction Commited; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : SELECT ICL_Image, CONCAT(ICL_FirstName, ' ', ICL_LastName) AS FullName, ICL_FirstName, ICL_LastName, ICL_UserName FROM ICL_Users WHERE ICL_Email=@ICL_Email; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : select * from ICL_Menu inner join ICL_SubMaster a on Menukey=a.SM_MenuId inner join ICL_GroupMaster b on b.GM_Pk=a.SM_GroupId inner join ICL_Users c on b.GM_Role = c.ICL_role where parentmenuid='0' and c.ICL_role='2' and ICL_Email='jijesh.p@iclgo.com' order by menulist asc; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : select * from ICL_Menu inner join ICL_SubMaster a on Menukey=a.SM_MenuId inner join ICL_GroupMaster b on b.GM_Pk = a.SM_GroupId inner join ICL_Users c on b.GM_Role = c.ICL_role where c.ICL_role='2' and ICL_Email='jijesh.p@iclgo.com' order by menulist asc; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : with overall as( SELECT org_name, org_id, org_ccode FROM ICl_Organization  WHERE org_ccode = '0' GROUP BY org_name,org_id, org_ccode union all SELECT STRING_AGG(UPPER(LEFT(value, 1)) + LOWER(SUBSTRING(value, 2, LEN(value))), ' ') AS org_name, org_id, org_ccode FROM ICl_Organization CROSS APPLY STRING_SPLIT(org_name, ' ')  WHERE org_userid='36' and org_ccode != '0' GROUP BY org_id, org_ccode ) select org_name, org_id, org_ccode from overall ORDER BY org_ccode ASC; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : with overall as( SELECT org_name, org_id, org_ccode FROM ICl_Organization  WHERE org_ccode = '0' GROUP BY org_name,org_id, org_ccode union all SELECT STRING_AGG(UPPER(LEFT(value, 1)) + LOWER(SUBSTRING(value, 2, LEN(value))), ' ') AS org_name, org_id, org_ccode FROM ICl_Organization CROSS APPLY STRING_SPLIT(org_name, ' ')  WHERE org_userid='36' and org_ccode != '0' GROUP BY org_id, org_ccode ) select org_name, org_id, org_ccode from overall ORDER BY org_ccode ASC; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : 
+ IF EXISTS (SELECT 1 FROM organisationsession_table WHERE UserID = @UserID)
+ BEGIN
+     UPDATE organisationsession_table 
+     SET Org_ID = @Org_ID, Org_Name = @Org_Name,Username=@Username,UserRole=@UserRole,Org_CCode=@Org_CCode,ModifiedOn = GETDATE()
+     WHERE UserID = @UserID
+ END
+ ELSE
+ BEGIN
+     INSERT INTO organisationsession_table (UserID, Org_ID, Org_Name,UserRole,Username,Org_CCode,CreatedOn)
+     VALUES (@UserID, @Org_ID, @Org_Name,@UserRole,@Username,@Org_CCode, GETDATE())
+ END; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Affected Records : 1; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Transaction Commited; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : SELECT ICL_Image, CONCAT(ICL_FirstName, ' ', ICL_LastName) AS FullName, ICL_FirstName, ICL_LastName, ICL_UserName FROM ICL_Users WHERE ICL_Email=@ICL_Email; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : select * from ICL_Menu inner join ICL_SubMaster a on Menukey=a.SM_MenuId inner join ICL_GroupMaster b on b.GM_Pk=a.SM_GroupId inner join ICL_Users c on b.GM_Role = c.ICL_role where parentmenuid='0' and c.ICL_role='2' and ICL_Email='jijesh.p@iclgo.com' order by menulist asc; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : select * from ICL_Menu inner join ICL_SubMaster a on Menukey=a.SM_MenuId inner join ICL_GroupMaster b on b.GM_Pk = a.SM_GroupId inner join ICL_Users c on b.GM_Role = c.ICL_role where c.ICL_role='2' and ICL_Email='jijesh.p@iclgo.com' order by menulist asc; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : with overall as( SELECT org_name, org_id, org_ccode FROM ICl_Organization  WHERE org_ccode = '0' GROUP BY org_name,org_id, org_ccode union all SELECT STRING_AGG(UPPER(LEFT(value, 1)) + LOWER(SUBSTRING(value, 2, LEN(value))), ' ') AS org_name, org_id, org_ccode FROM ICl_Organization CROSS APPLY STRING_SPLIT(org_name, ' ')  WHERE org_userid='36' and org_ccode != '0' GROUP BY org_id, org_ccode ) select org_name, org_id, org_ccode from overall ORDER BY org_ccode ASC; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : with overall as( SELECT org_name, org_id, org_ccode FROM ICl_Organization  WHERE org_ccode = '0' GROUP BY org_name,org_id, org_ccode union all SELECT STRING_AGG(UPPER(LEFT(value, 1)) + LOWER(SUBSTRING(value, 2, LEN(value))), ' ') AS org_name, org_id, org_ccode FROM ICl_Organization CROSS APPLY STRING_SPLIT(org_name, ' ')  WHERE org_userid='36' and org_ccode != '0' GROUP BY org_id, org_ccode ) select org_name, org_id, org_ccode from overall ORDER BY org_ccode ASC; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : 
+ IF EXISTS (SELECT 1 FROM organisationsession_table WHERE UserID = @UserID)
+ BEGIN
+     UPDATE organisationsession_table 
+     SET Org_ID = @Org_ID, Org_Name = @Org_Name,Username=@Username,UserRole=@UserRole,Org_CCode=@Org_CCode,ModifiedOn = GETDATE()
+     WHERE UserID = @UserID
+ END
+ ELSE
+ BEGIN
+     INSERT INTO organisationsession_table (UserID, Org_ID, Org_Name,UserRole,Username,Org_CCode,CreatedOn)
+     VALUES (@UserID, @Org_ID, @Org_Name,@UserRole,@Username,@Org_CCode, GETDATE())
+ END; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Affected Records : 1; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Transaction Commited; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : SELECT ICL_Image, CONCAT(ICL_FirstName, ' ', ICL_LastName) AS FullName, ICL_FirstName, ICL_LastName, ICL_UserName FROM ICL_Users WHERE ICL_Email=@ICL_Email; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : select * from ICL_Menu inner join ICL_SubMaster a on Menukey=a.SM_MenuId inner join ICL_GroupMaster b on b.GM_Pk=a.SM_GroupId inner join ICL_Users c on b.GM_Role = c.ICL_role where parentmenuid='0' and c.ICL_role='2' and ICL_Email='jijesh.p@iclgo.com' order by menulist asc; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : select * from ICL_Menu inner join ICL_SubMaster a on Menukey=a.SM_MenuId inner join ICL_GroupMaster b on b.GM_Pk = a.SM_GroupId inner join ICL_Users c on b.GM_Role = c.ICL_role where c.ICL_role='2' and ICL_Email='jijesh.p@iclgo.com' order by menulist asc; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : with overall as( SELECT org_name, org_id, org_ccode FROM ICl_Organization  WHERE org_ccode = '0' GROUP BY org_name,org_id, org_ccode union all SELECT STRING_AGG(UPPER(LEFT(value, 1)) + LOWER(SUBSTRING(value, 2, LEN(value))), ' ') AS org_name, org_id, org_ccode FROM ICl_Organization CROSS APPLY STRING_SPLIT(org_name, ' ')  WHERE org_userid='36' and org_ccode != '0' GROUP BY org_id, org_ccode ) select org_name, org_id, org_ccode from overall ORDER BY org_ccode ASC; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : with overall as( SELECT org_name, org_id, org_ccode FROM ICl_Organization  WHERE org_ccode = '0' GROUP BY org_name,org_id, org_ccode union all SELECT STRING_AGG(UPPER(LEFT(value, 1)) + LOWER(SUBSTRING(value, 2, LEN(value))), ' ') AS org_name, org_id, org_ccode FROM ICl_Organization CROSS APPLY STRING_SPLIT(org_name, ' ')  WHERE org_userid='36' and org_ccode != '0' GROUP BY org_id, org_ccode ) select org_name, org_id, org_ccode from overall ORDER BY org_ccode ASC; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : 
+ IF EXISTS (SELECT 1 FROM organisationsession_table WHERE UserID = @UserID)
+ BEGIN
+     UPDATE organisationsession_table 
+     SET Org_ID = @Org_ID, Org_Name = @Org_Name,Username=@Username,UserRole=@UserRole,Org_CCode=@Org_CCode,ModifiedOn = GETDATE()
+     WHERE UserID = @UserID
+ END
+ ELSE
+ BEGIN
+     INSERT INTO organisationsession_table (UserID, Org_ID, Org_Name,UserRole,Username,Org_CCode,CreatedOn)
+     VALUES (@UserID, @Org_ID, @Org_Name,@UserRole,@Username,@Org_CCode, GETDATE())
+ END; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Affected Records : 1; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Transaction Commited; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : SELECT ICL_Image, CONCAT(ICL_FirstName, ' ', ICL_LastName) AS FullName, ICL_FirstName, ICL_LastName, ICL_UserName FROM ICL_Users WHERE ICL_Email=@ICL_Email; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : select * from ICL_Menu inner join ICL_SubMaster a on Menukey=a.SM_MenuId inner join ICL_GroupMaster b on b.GM_Pk=a.SM_GroupId inner join ICL_Users c on b.GM_Role = c.ICL_role where parentmenuid='0' and c.ICL_role='2' and ICL_Email='jijesh.p@iclgo.com' order by menulist asc; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : select * from ICL_Menu inner join ICL_SubMaster a on Menukey=a.SM_MenuId inner join ICL_GroupMaster b on b.GM_Pk = a.SM_GroupId inner join ICL_Users c on b.GM_Role = c.ICL_role where c.ICL_role='2' and ICL_Email='jijesh.p@iclgo.com' order by menulist asc; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : with overall as( SELECT org_name, org_id, org_ccode FROM ICl_Organization  WHERE org_ccode = '0' GROUP BY org_name,org_id, org_ccode union all SELECT STRING_AGG(UPPER(LEFT(value, 1)) + LOWER(SUBSTRING(value, 2, LEN(value))), ' ') AS org_name, org_id, org_ccode FROM ICl_Organization CROSS APPLY STRING_SPLIT(org_name, ' ')  WHERE org_userid='36' and org_ccode != '0' GROUP BY org_id, org_ccode ) select org_name, org_id, org_ccode from overall ORDER BY org_ccode ASC; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : with overall as( SELECT org_name, org_id, org_ccode FROM ICl_Organization  WHERE org_ccode = '0' GROUP BY org_name,org_id, org_ccode union all SELECT STRING_AGG(UPPER(LEFT(value, 1)) + LOWER(SUBSTRING(value, 2, LEN(value))), ' ') AS org_name, org_id, org_ccode FROM ICl_Organization CROSS APPLY STRING_SPLIT(org_name, ' ')  WHERE org_userid='36' and org_ccode != '0' GROUP BY org_id, org_ccode ) select org_name, org_id, org_ccode from overall ORDER BY org_ccode ASC; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : 
+ IF EXISTS (SELECT 1 FROM organisationsession_table WHERE UserID = @UserID)
+ BEGIN
+     UPDATE organisationsession_table 
+     SET Org_ID = @Org_ID, Org_Name = @Org_Name,Username=@Username,UserRole=@UserRole,Org_CCode=@Org_CCode,ModifiedOn = GETDATE()
+     WHERE UserID = @UserID
+ END
+ ELSE
+ BEGIN
+     INSERT INTO organisationsession_table (UserID, Org_ID, Org_Name,UserRole,Username,Org_CCode,CreatedOn)
+     VALUES (@UserID, @Org_ID, @Org_Name,@UserRole,@Username,@Org_CCode, GETDATE())
+ END; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Affected Records : 1; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Transaction Commited; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : SELECT ICL_Image, CONCAT(ICL_FirstName, ' ', ICL_LastName) AS FullName, ICL_FirstName, ICL_LastName, ICL_UserName FROM ICL_Users WHERE ICL_Email=@ICL_Email; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : select * from ICL_Menu inner join ICL_SubMaster a on Menukey=a.SM_MenuId inner join ICL_GroupMaster b on b.GM_Pk=a.SM_GroupId inner join ICL_Users c on b.GM_Role = c.ICL_role where parentmenuid='0' and c.ICL_role='2' and ICL_Email='jijesh.p@iclgo.com' order by menulist asc; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : select * from ICL_Menu inner join ICL_SubMaster a on Menukey=a.SM_MenuId inner join ICL_GroupMaster b on b.GM_Pk = a.SM_GroupId inner join ICL_Users c on b.GM_Role = c.ICL_role where c.ICL_role='2' and ICL_Email='jijesh.p@iclgo.com' order by menulist asc; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : with overall as( SELECT org_name, org_id, org_ccode FROM ICl_Organization  WHERE org_ccode = '0' GROUP BY org_name,org_id, org_ccode union all SELECT STRING_AGG(UPPER(LEFT(value, 1)) + LOWER(SUBSTRING(value, 2, LEN(value))), ' ') AS org_name, org_id, org_ccode FROM ICl_Organization CROSS APPLY STRING_SPLIT(org_name, ' ')  WHERE org_userid='36' and org_ccode != '0' GROUP BY org_id, org_ccode ) select org_name, org_id, org_ccode from overall ORDER BY org_ccode ASC; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : with overall as( SELECT org_name, org_id, org_ccode FROM ICl_Organization  WHERE org_ccode = '0' GROUP BY org_name,org_id, org_ccode union all SELECT STRING_AGG(UPPER(LEFT(value, 1)) + LOWER(SUBSTRING(value, 2, LEN(value))), ' ') AS org_name, org_id, org_ccode FROM ICl_Organization CROSS APPLY STRING_SPLIT(org_name, ' ')  WHERE org_userid='36' and org_ccode != '0' GROUP BY org_id, org_ccode ) select org_name, org_id, org_ccode from overall ORDER BY org_ccode ASC; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : 
+ IF EXISTS (SELECT 1 FROM organisationsession_table WHERE UserID = @UserID)
+ BEGIN
+     UPDATE organisationsession_table 
+     SET Org_ID = @Org_ID, Org_Name = @Org_Name,Username=@Username,UserRole=@UserRole,Org_CCode=@Org_CCode,ModifiedOn = GETDATE()
+     WHERE UserID = @UserID
+ END
+ ELSE
+ BEGIN
+     INSERT INTO organisationsession_table (UserID, Org_ID, Org_Name,UserRole,Username,Org_CCode,CreatedOn)
+     VALUES (@UserID, @Org_ID, @Org_Name,@UserRole,@Username,@Org_CCode, GETDATE())
+ END; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Affected Records : 1; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Transaction Commited; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : SELECT ICL_Image, CONCAT(ICL_FirstName, ' ', ICL_LastName) AS FullName, ICL_FirstName, ICL_LastName, ICL_UserName FROM ICL_Users WHERE ICL_Email=@ICL_Email; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : select * from ICL_Menu inner join ICL_SubMaster a on Menukey=a.SM_MenuId inner join ICL_GroupMaster b on b.GM_Pk=a.SM_GroupId inner join ICL_Users c on b.GM_Role = c.ICL_role where parentmenuid='0' and c.ICL_role='2' and ICL_Email='jijesh.p@iclgo.com' order by menulist asc; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : select * from ICL_Menu inner join ICL_SubMaster a on Menukey=a.SM_MenuId inner join ICL_GroupMaster b on b.GM_Pk = a.SM_GroupId inner join ICL_Users c on b.GM_Role = c.ICL_role where c.ICL_role='2' and ICL_Email='jijesh.p@iclgo.com' order by menulist asc; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : with overall as( SELECT org_name, org_id, org_ccode FROM ICl_Organization  WHERE org_ccode = '0' GROUP BY org_name,org_id, org_ccode union all SELECT STRING_AGG(UPPER(LEFT(value, 1)) + LOWER(SUBSTRING(value, 2, LEN(value))), ' ') AS org_name, org_id, org_ccode FROM ICl_Organization CROSS APPLY STRING_SPLIT(org_name, ' ')  WHERE org_userid='36' and org_ccode != '0' GROUP BY org_id, org_ccode ) select org_name, org_id, org_ccode from overall ORDER BY org_ccode ASC; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : with overall as( SELECT org_name, org_id, org_ccode FROM ICl_Organization  WHERE org_ccode = '0' GROUP BY org_name,org_id, org_ccode union all SELECT STRING_AGG(UPPER(LEFT(value, 1)) + LOWER(SUBSTRING(value, 2, LEN(value))), ' ') AS org_name, org_id, org_ccode FROM ICl_Organization CROSS APPLY STRING_SPLIT(org_name, ' ')  WHERE org_userid='36' and org_ccode != '0' GROUP BY org_id, org_ccode ) select org_name, org_id, org_ccode from overall ORDER BY org_ccode ASC; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : 
+ IF EXISTS (SELECT 1 FROM organisationsession_table WHERE UserID = @UserID)
+ BEGIN
+     UPDATE organisationsession_table 
+     SET Org_ID = @Org_ID, Org_Name = @Org_Name,Username=@Username,UserRole=@UserRole,Org_CCode=@Org_CCode,ModifiedOn = GETDATE()
+     WHERE UserID = @UserID
+ END
+ ELSE
+ BEGIN
+     INSERT INTO organisationsession_table (UserID, Org_ID, Org_Name,UserRole,Username,Org_CCode,CreatedOn)
+     VALUES (@UserID, @Org_ID, @Org_Name,@UserRole,@Username,@Org_CCode, GETDATE())
+ END; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Affected Records : 1; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Transaction Commited; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : SELECT ICL_Image, CONCAT(ICL_FirstName, ' ', ICL_LastName) AS FullName, ICL_FirstName, ICL_LastName, ICL_UserName FROM ICL_Users WHERE ICL_Email=@ICL_Email; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : select * from ICL_Menu inner join ICL_SubMaster a on Menukey=a.SM_MenuId inner join ICL_GroupMaster b on b.GM_Pk=a.SM_GroupId inner join ICL_Users c on b.GM_Role = c.ICL_role where parentmenuid='0' and c.ICL_role='2' and ICL_Email='jijesh.p@iclgo.com' order by menulist asc; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : select * from ICL_Menu inner join ICL_SubMaster a on Menukey=a.SM_MenuId inner join ICL_GroupMaster b on b.GM_Pk = a.SM_GroupId inner join ICL_Users c on b.GM_Role = c.ICL_role where c.ICL_role='2' and ICL_Email='jijesh.p@iclgo.com' order by menulist asc; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : with overall as( SELECT org_name, org_id, org_ccode FROM ICl_Organization  WHERE org_ccode = '0' GROUP BY org_name,org_id, org_ccode union all SELECT STRING_AGG(UPPER(LEFT(value, 1)) + LOWER(SUBSTRING(value, 2, LEN(value))), ' ') AS org_name, org_id, org_ccode FROM ICl_Organization CROSS APPLY STRING_SPLIT(org_name, ' ')  WHERE org_userid='36' and org_ccode != '0' GROUP BY org_id, org_ccode ) select org_name, org_id, org_ccode from overall ORDER BY org_ccode ASC; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : with overall as( SELECT org_name, org_id, org_ccode FROM ICl_Organization  WHERE org_ccode = '0' GROUP BY org_name,org_id, org_ccode union all SELECT STRING_AGG(UPPER(LEFT(value, 1)) + LOWER(SUBSTRING(value, 2, LEN(value))), ' ') AS org_name, org_id, org_ccode FROM ICl_Organization CROSS APPLY STRING_SPLIT(org_name, ' ')  WHERE org_userid='36' and org_ccode != '0' GROUP BY org_id, org_ccode ) select org_name, org_id, org_ccode from overall ORDER BY org_ccode ASC; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : 
+ IF EXISTS (SELECT 1 FROM organisationsession_table WHERE UserID = @UserID)
+ BEGIN
+     UPDATE organisationsession_table 
+     SET Org_ID = @Org_ID, Org_Name = @Org_Name,Username=@Username,UserRole=@UserRole,Org_CCode=@Org_CCode,ModifiedOn = GETDATE()
+     WHERE UserID = @UserID
+ END
+ ELSE
+ BEGIN
+     INSERT INTO organisationsession_table (UserID, Org_ID, Org_Name,UserRole,Username,Org_CCode,CreatedOn)
+     VALUES (@UserID, @Org_ID, @Org_Name,@UserRole,@Username,@Org_CCode, GETDATE())
+ END; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Affected Records : 1; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Transaction Commited; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : SELECT ICL_Image, CONCAT(ICL_FirstName, ' ', ICL_LastName) AS FullName, ICL_FirstName, ICL_LastName, ICL_UserName FROM ICL_Users WHERE ICL_Email=@ICL_Email; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : select * from ICL_Menu inner join ICL_SubMaster a on Menukey=a.SM_MenuId inner join ICL_GroupMaster b on b.GM_Pk=a.SM_GroupId inner join ICL_Users c on b.GM_Role = c.ICL_role where parentmenuid='0' and c.ICL_role='2' and ICL_Email='jijesh.p@iclgo.com' order by menulist asc; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : select * from ICL_Menu inner join ICL_SubMaster a on Menukey=a.SM_MenuId inner join ICL_GroupMaster b on b.GM_Pk = a.SM_GroupId inner join ICL_Users c on b.GM_Role = c.ICL_role where c.ICL_role='2' and ICL_Email='jijesh.p@iclgo.com' order by menulist asc; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : with overall as( SELECT org_name, org_id, org_ccode FROM ICl_Organization  WHERE org_ccode = '0' GROUP BY org_name,org_id, org_ccode union all SELECT STRING_AGG(UPPER(LEFT(value, 1)) + LOWER(SUBSTRING(value, 2, LEN(value))), ' ') AS org_name, org_id, org_ccode FROM ICl_Organization CROSS APPLY STRING_SPLIT(org_name, ' ')  WHERE org_userid='36' and org_ccode != '0' GROUP BY org_id, org_ccode ) select org_name, org_id, org_ccode from overall ORDER BY org_ccode ASC; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : with overall as( SELECT org_name, org_id, org_ccode FROM ICl_Organization  WHERE org_ccode = '0' GROUP BY org_name,org_id, org_ccode union all SELECT STRING_AGG(UPPER(LEFT(value, 1)) + LOWER(SUBSTRING(value, 2, LEN(value))), ' ') AS org_name, org_id, org_ccode FROM ICl_Organization CROSS APPLY STRING_SPLIT(org_name, ' ')  WHERE org_userid='36' and org_ccode != '0' GROUP BY org_id, org_ccode ) select org_name, org_id, org_ccode from overall ORDER BY org_ccode ASC; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : 
+ IF EXISTS (SELECT 1 FROM organisationsession_table WHERE UserID = @UserID)
+ BEGIN
+     UPDATE organisationsession_table 
+     SET Org_ID = @Org_ID, Org_Name = @Org_Name,Username=@Username,UserRole=@UserRole,Org_CCode=@Org_CCode,ModifiedOn = GETDATE()
+     WHERE UserID = @UserID
+ END
+ ELSE
+ BEGIN
+     INSERT INTO organisationsession_table (UserID, Org_ID, Org_Name,UserRole,Username,Org_CCode,CreatedOn)
+     VALUES (@UserID, @Org_ID, @Org_Name,@UserRole,@Username,@Org_CCode, GETDATE())
+ END; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Affected Records : 1; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Transaction Commited; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : INSERT INTO Quotes_Details (FirstName, Surename, CompanyName, EmailAddress, ContactNumber, TransportMode, ReadyToCollectDate, TargetDeliveryDate, Volume, Weight, Width, Length, Height, Dimensions, PackageType, Quantity, CustomsClearance, Incoterms, HazardousGoods, OutOfGauge, AdditionalComments, UploadFile, CreatedOn, CreatedBy, ModifiedOn, ModifiedBy) VALUES (@FirstName, @Surename, @CompanyName, @EmailAddress, @ContactNumber, @TransportMode, @ReadyToCollectDate, @TargetDeliveryDate, @Volume, @Weight, @Width, @Length, @Height, @Dimensions, @PackageType, @Quantity, @CustomsClearance, @Incoterms, @HazardousGoods, @OutOfGauge, @AdditionalComments, @UploadFile, @CreatedOn, @CreatedBy, @ModifiedOn, @ModifiedBy); StackTrace:; InnerException:;CustomReference:;
+Severity:Error;Source:; Message:Param Name : @FirstName;Type : String; Value : Jijesh P | Param Name : @Surename;Type : String; Value : MARAN | Param Name : @CompanyName;Type : String; Value : ICL UK | Param Name : @EmailAddress;Type : String; Value : jijesh.p@iclgo.com | Param Name : @ContactNumber;Type : String; Value : 09003041568 | Param Name : @TransportMode;Type : String; Value : 2 | Param Name : @ReadyToCollectDate;Type : String; Value : 2025-03-19 | Param Name : @TargetDeliveryDate;Type : String; Value : 2025-03-29 | Param Name : @Volume;Type : String; Value : 233 | Param Name : @Weight;Type : String; Value : 123 | Param Name : @Width;Type : String; Value : 12 | Param Name : @Length;Type : String; Value : 12 | Param Name : @Height;Type : String; Value : 12 | Param Name : @Dimensions;Type : String; Value : 000 | Param Name : @PackageType;Type : String; Value : 7 | Param Name : @Quantity;Type : String; Value : 12 | Param Name : @CustomsClearance;Type : String; Value : 4 | Param Name : @Incoterms;Type : String; Value : 1 | Param Name : @AdditionalComments;Type : String; Value :  | Param Name : @OutOfGauge;Type : Int32; Value : 1 | Param Name : @HazardousGoods;Type : Int32; Value : 1 | Param Name : @UploadFile;Type : String; Value : 36 | Param Name : @CreatedOn;Type : DateTime; Value : 22-03-2025 13:21:20 | Param Name : @CreatedBy;Type : String; Value : 36 | Param Name : @ModifiedOn;Type : DateTime; Value : 22-03-2025 13:21:25 | Param Name : @ModifiedBy;Type : String; Value : 36 | ; StackTrace:; InnerException:;CustomReference:;
+Severity:Error;Source:; Message:System.Data.SqlClient.SqlException (0x80131904): Implicit conversion from data type nvarchar to varbinary(max) is not allowed. Use the CONVERT function to run this query.
+   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString, Boolean isInternal, Boolean forDescribeParameterEncryption, Boolean shouldCacheForAlwaysEncrypted)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)
+   at System.Data.SqlClient.SqlCommand.InternalExecuteNonQuery(TaskCompletionSource`1 completion, String methodName, Boolean sendToPipe, Int32 timeout, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)
+   at System.Data.SqlClient.SqlCommand.ExecuteNonQuery()
+   at DataAccessF.SqlUpdate(ArrayList arr_CmdObj) in d:\ICL_new\App_Code\DataAccessF.cs:line 375
+ClientConnectionId:89d3882c-c440-475d-b28a-ecca5a0341a5
+Error Number:257,State:3,Class:16; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : select * from ICL_Users where ICL_Email=@Username and ICL_Password =@Password  COLLATE SQL_Latin1_General_CP1_CS_AS; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : select top 1 Org_Name,Org_ID,Org_CCode from  organisationsession_table where UserID='36' union all select  org_name,org_id,org_ccode from  ICl_Organization  where org_ccode='0'; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : INSERT INTO ICL_UserLogs (Log_UserId, Log_UserEmail, Log_UserRole, Log_UserLogIn) VALUES (@UserId, @UserName, @UserRole, @UserLogIn); StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Affected Records : 1; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Transaction Commited; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : SELECT top 1 Log_ID FROM ICL_UserLogs WHERE Log_UserLogIn = '2025-03-22 13:36:33' and Log_UserId='36'; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : EXEC GetwidgetAdmin  @Todaydate = '03-22-2025'; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : EXEC GetShipmentCounts ; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : select distinct spr_origin from shipmentProfilereport  where spr_modifiedon is null; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : select DISTINCT a.containernumber,b.icfd_jobref,c.spr_origin,c.spr_destination,FORMAT(c.spr_originetd, 'dd-MMM-yyyy') AS  spr_originetd from ICLRoute_livelocation a inner join swl_icfdreport b on a.containernumber=b.icfd_container inner join shipmentProfilereport c on b.icfd_jobref=c.spr_shipmentid where  a.route_livelatitude is not null and a.route_livelongitude is not null and c.spr_modifiedon is null ; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : select count(*)as quotescount from Quotes_Details where CAST(CreatedOn AS DATE)  = '03-22-2025' and ModifiedOn is null; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : SELECT ICL_Image, CONCAT(ICL_FirstName, ' ', ICL_LastName) AS FullName, ICL_FirstName, ICL_LastName, ICL_UserName FROM ICL_Users WHERE ICL_Email=@ICL_Email; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : select * from ICL_Menu inner join ICL_SubMaster a on Menukey=a.SM_MenuId inner join ICL_GroupMaster b on b.GM_Pk=a.SM_GroupId inner join ICL_Users c on b.GM_Role = c.ICL_role where parentmenuid='0' and c.ICL_role='2' and ICL_Email='jijesh.p@iclgo.com' order by menulist asc; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : select * from ICL_Menu inner join ICL_SubMaster a on Menukey=a.SM_MenuId inner join ICL_GroupMaster b on b.GM_Pk = a.SM_GroupId inner join ICL_Users c on b.GM_Role = c.ICL_role where c.ICL_role='2' and ICL_Email='jijesh.p@iclgo.com' order by menulist asc; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : with overall as( SELECT org_name, org_id, org_ccode FROM ICl_Organization  WHERE org_ccode = '0' GROUP BY org_name,org_id, org_ccode union all SELECT STRING_AGG(UPPER(LEFT(value, 1)) + LOWER(SUBSTRING(value, 2, LEN(value))), ' ') AS org_name, org_id, org_ccode FROM ICl_Organization CROSS APPLY STRING_SPLIT(org_name, ' ')  WHERE org_userid='36' and org_ccode != '0' GROUP BY org_id, org_ccode ) select org_name, org_id, org_ccode from overall ORDER BY org_ccode ASC; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : with overall as( SELECT org_name, org_id, org_ccode FROM ICl_Organization  WHERE org_ccode = '0' GROUP BY org_name,org_id, org_ccode union all SELECT STRING_AGG(UPPER(LEFT(value, 1)) + LOWER(SUBSTRING(value, 2, LEN(value))), ' ') AS org_name, org_id, org_ccode FROM ICl_Organization CROSS APPLY STRING_SPLIT(org_name, ' ')  WHERE org_userid='36' and org_ccode != '0' GROUP BY org_id, org_ccode ) select org_name, org_id, org_ccode from overall ORDER BY org_ccode ASC; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : 
+ IF EXISTS (SELECT 1 FROM organisationsession_table WHERE UserID = @UserID)
+ BEGIN
+     UPDATE organisationsession_table 
+     SET Org_ID = @Org_ID, Org_Name = @Org_Name,Username=@Username,UserRole=@UserRole,Org_CCode=@Org_CCode,ModifiedOn = GETDATE()
+     WHERE UserID = @UserID
+ END
+ ELSE
+ BEGIN
+     INSERT INTO organisationsession_table (UserID, Org_ID, Org_Name,UserRole,Username,Org_CCode,CreatedOn)
+     VALUES (@UserID, @Org_ID, @Org_Name,@UserRole,@Username,@Org_CCode, GETDATE())
+ END; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Affected Records : 1; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Transaction Commited; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : EXEC GetcalendarAdmin; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : select SUM(CASE WHEN YEAR(a.spr_originetd)= 2025 and MONTH(a.spr_originetd) = 3 THEN 1 ELSE 0 END) AS 'Mar 2025',SUM(CASE WHEN YEAR(a.spr_originetd)= 2025 and MONTH(a.spr_originetd) = 2 THEN 1 ELSE 0 END) AS 'Feb 2025',SUM(CASE WHEN YEAR(a.spr_originetd)= 2025 and MONTH(a.spr_originetd) = 1 THEN 1 ELSE 0 END) AS 'Jan 2025',SUM(CASE WHEN YEAR(a.spr_originetd)= 2024 and MONTH(a.spr_originetd) = 12 THEN 1 ELSE 0 END) AS 'Dec 2024',SUM(CASE WHEN YEAR(a.spr_originetd)= 2024 and MONTH(a.spr_originetd) = 11 THEN 1 ELSE 0 END) AS 'Nov 2024',SUM(CASE WHEN YEAR(a.spr_originetd)= 2024 and MONTH(a.spr_originetd) = 10 THEN 1 ELSE 0 END) AS 'Oct 2024',SUM(CASE WHEN YEAR(a.spr_originetd)= 2024 and MONTH(a.spr_originetd) = 9 THEN 1 ELSE 0 END) AS 'Sep 2024',SUM(CASE WHEN YEAR(a.spr_originetd)= 2024 and MONTH(a.spr_originetd) = 8 THEN 1 ELSE 0 END) AS 'Aug 2024',SUM(CASE WHEN YEAR(a.spr_originetd)= 2024 and MONTH(a.spr_originetd) = 7 THEN 1 ELSE 0 END) AS 'Jul 2024',SUM(CASE WHEN YEAR(a.spr_originetd)= 2024 and MONTH(a.spr_originetd) = 6 THEN 1 ELSE 0 END) AS 'Jun 2024',SUM(CASE WHEN YEAR(a.spr_originetd)= 2024 and MONTH(a.spr_originetd) = 5 THEN 1 ELSE 0 END) AS 'May 2024',SUM(CASE WHEN YEAR(a.spr_originetd)= 2024 and MONTH(a.spr_originetd) = 4 THEN 1 ELSE 0 END) AS 'Apr 2024' from  shipmentProfilereport a ; StackTrace:; InnerException:;CustomReference:;
+Severity:Information;Source:; Message:Sql : SELECT DISTINCT icfd_jobref, icfd_eta AS Arriving, 
+               CASE 
+                   WHEN icfd_estimateddeliver IS NOT NULL AND icfd_estimateddeliver <> '1900-01-01 00:00:00.000' 
+                   THEN icfd_estimateddeliver 
+                   WHEN icfd_actualdeliver IS NOT NULL AND icfd_actualdeliver <> '1900-01-01 00:00:00.000' 
+                   THEN icfd_actualdeliver 
+                   ELSE NULL 
+               END AS shipped 
+               FROM swl_icfdreport 
+               WHERE TRY_CONVERT(DATETIME,icfd_eta)  <= GETDATE() order by icfd_eta asc; StackTrace:; InnerException:;CustomReference:;

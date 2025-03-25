@@ -1,0 +1,9 @@
+﻿				 
+                 <tr><td>%%SerialNo%%</td>
+												<td>%%bd_document%%</td>
+												<td><a class="custom-badge btn btn-outline-info" target="_blank" onclick="downloadFile('%%bd_bookingid%%', '%%bd_document%%')">Download</a></td>
+											</tr>
+              
+
+
+          

@@ -1,0 +1,52 @@
+﻿
+/*#maps {
+    pointer-events: none;
+}
+
+#map {
+    pointer-events: none;
+}*/
+
+#popupButton {
+    display: none;
+}
+
+.optionradio {
+    display: none;
+}
+
+/* Style the label for the radio button */
+.lablerang {
+    display: inline-block;
+    padding: 8px 16px;
+    background-color: #e0e0e0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+/* Style the label when selected */
+.optionradio:checked + .lablerang {
+    background-color: #4caf50;
+    color: #fff;
+}
+
+/* Optional: Add spacing between buttons */
+.lablerang + .lablerang {
+    margin-left: 8px;
+}
+/* Customize the appearance of the date picker */
+.optionradio {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    color: #000;
+}
+
+    /* Adjust the appearance of the date picker arrow */
+    .optionradio::-webkit-calendar-picker-indicator {
+        filter: invert(1);
+        cursor: pointer;
+    }
+
